@@ -1,0 +1,21 @@
+# Ignore unnecessary files
+.DS_Store
+
+# Ignore local development config files and those with sensitive information
+wp-config.php
+local.php
+*.local.php
+
+# Ignore dir containing Composer dependencies and temp folder
+vendor/
+tmp/
+
+# WordPress - ignore everything except child theme dir
+# A subfolder or file cannot be included if its parent folder is excluded, hence use of *
+# E.g. if `wp/` is used instead of `wp/*`, the entire `wp` dir will be excluded including the child theme
+wp/*
+!wp/wp-content
+wp/wp-content/*
+!wp/wp-content/themes
+wp/wp-content/themes/*
+!wp/wp-content/themes/child-theme

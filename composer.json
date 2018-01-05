@@ -1,0 +1,104 @@
+{
+  "_comments": [
+    "See https://roots.io/using-composer-with-wordpress/",
+    "See http://composer.rarst.net/"
+  ],
+
+  "name": "zionsg/wordpress-with-composer",
+  "description": "Sample skeleton application demonstrating use of Composer with WordPress",
+  "type": "project",
+
+  "repositories": [
+    {
+      "_comments": [
+        "This enables Composer to find packages from WordPress Packagist at wpackagist.org",
+        "wpackagist mirrors all wordpress.org plugins/themes & adds a composer.json that requires composer/installers"
+      ],
+      "type": "composer",
+      "url": "https://wpackagist.org"
+    },
+    {
+      "_comments": [
+        "Note that this theme will not work as the main files are not in the root of its GitHub repo",
+        "Example for including a theme from GitHub which does not use composer.json or composer/installers",
+        "composer/installers must be required in this package and not under the root `require` key",
+        "`composer require` cannot be used for this - it must be manually added to the root `require` key"
+      ],
+      "type": "package",
+      "package": {
+        "name": "zionsg/ZnWP-Bootstrap-Theme",
+        "type": "wordpress-theme",
+        "version": "dev-master",
+        "dist": {
+          "type": "zip",
+          "url": "https://github.com/zionsg/ZnWP-Bootstrap-Theme/archive/master.zip"
+        },
+        "require": {
+          "composer/installers": "~1.0"
+        }
+      }
+    },
+    {
+      "_comments": [
+        "Unlike the example above for the theme, this plugin should work as the main files are in the root of its repo",
+        "Example for including a plugin from GitHub which does not use composer.json or composer/installers",
+        "composer/installers must be required in this package and not under the root `require` key",
+        "`composer require` cannot be used for this - it must be manually added to the root `require` section"
+      ],
+      "type": "package",
+      "package": {
+        "name": "zionsg/znwp-webservice-plugin",
+        "type": "wordpress-plugin",
+        "version": "dev-master",
+        "dist": {
+          "type": "zip",
+          "url": "https://github.com/zionsg/znwp-webservice-plugin/archive/master.zip"
+        },
+        "require": {
+          "composer/installers": "~1.0"
+        }
+      }
+    }
+  ],
+
+  "_comments_require": [
+    "johnpbloch/wordpress is an auto-updating fork of WordPress with composer.json added",
+    "2 themes are installed - one from wpackagist and GitHub",
+    "2 plugins are installed - one from wpackagist and GitHub"
+  ],
+  "require": {
+    "php": "^7.0",
+    "johnpbloch/wordpress": "^4.9",
+    "wpackagist-theme/p2": "^1.5",
+    "wpackagist-plugin/jetpack": "^5.7",
+    "zionsg/ZnWP-Bootstrap-Theme": "dev-master",
+    "zionsg/znwp-webservice-plugin": "dev-master"
+  },
+
+  "autoload": {
+      "psr-4": {
+          "App\\": "src/App/"
+      }
+  },
+
+  "extra": {
+    "_comments": [
+      "wordpress-install-dir is used by johnpbloch/wordpress and allows installing to a custom path other than vendor",
+      "installer-paths is used by composer/installers & wpackagist, allows installing to custom paths"
+    ],
+    "wordpress-install-dir": "wp",
+    "installer-paths": {
+      "wp/wp-content/themes/{$name}/": ["type:wordpress-theme"],
+      "wp/wp-content/plugins/{$name}/": ["type:wordpress-plugin"],
+      "wp/wp-content/mu-plugins/{$name}/": ["type:wordpress-muplugin"],
+      "wp/wp-content/{$name}/": ["type:wordpress-dropin"]
+    }
+  },
+
+  "scripts": {
+    "pre-install-cmd": "App\\Composer::preInstall",
+    "post-install-cmd": "App\\Composer::postInstall",
+    "pre-update-cmd": "App\\Composer::preUpdate",
+    "post-update-cmd": "App\\Composer::postUpdate"
+  }
+}
