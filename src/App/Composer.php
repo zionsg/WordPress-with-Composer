@@ -12,6 +12,11 @@ class Composer
     protected static $projectRoot = null;
 
     /**
+     * @var string
+     */
+    protected static $wordpressPath = null;
+
+    /**
      * @var string[]
      */
     protected static $childThemePaths = null;
@@ -69,6 +74,7 @@ class Composer
     protected static function postInstallUpdate(Event $event)
     {
         self::copyOutChildThemes($event, false);
+        self::createWpConfig($event);
     }
 
     /**
@@ -80,6 +86,23 @@ class Composer
     protected static function preInstallUpdate(Event $event)
     {
         self::copyOutChildThemes($event, true);
+    }
+
+    /**
+     * Create wp-config.php
+     *
+     * @param  Event $event
+     * @return void
+     */
+    protected static function createWpConfig(Event $event)
+    {
+        $wpPath = self::getWordPressPath($event);
+
+        if (file_exists($wpPath . '/wp-config.php')) {
+            return;
+        }
+
+        shell_exec("cp {$wpPath}/wp-config-sample.php {$wpPath}/wp-config.php");
     }
 
     /**
@@ -152,6 +175,25 @@ class Composer
     protected static function getTempPath(Event $event)
     {
         return self::getProjectRoot($event) . '/tmp';
+    }
+
+    /**
+     * Get path for WordPress installation
+     *
+     * @param  Event $event
+     * @return string
+     */
+    protected static function getWordPressPath(Event $event)
+    {
+        if (null === self::$wordpressPath) {
+            $configFile = $event->getComposer()->getConfig()->getConfigSource()->getName();
+            $composerJson = json_decode(file_get_contents($configFile), true);
+
+            self::$wordpressPath = self::getProjectRoot($event) . '/'
+                . ($composerJson['extra']['wordpress-install-dir'] ?? '');
+        }
+
+        return self::$wordpressPath;
     }
 
     /**
