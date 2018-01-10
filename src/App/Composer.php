@@ -24,7 +24,7 @@ class Composer
      */
     public static function preInstall(Event $event)
     {
-        self::copyOutChildThemes($event, true);
+        self::preInstallUpdate($event);
     }
 
     /**
@@ -35,7 +35,7 @@ class Composer
      */
     public static function postInstall(Event $event)
     {
-        self::copyOutChildThemes($event, false);
+        self::postInstallUpdate($event);
     }
 
     /**
@@ -46,7 +46,7 @@ class Composer
      */
     public static function preUpdate(Event $event)
     {
-        self::copyOutChildThemes($event, true);
+        self::preInstallUpdate($event);
     }
 
     /**
@@ -57,7 +57,29 @@ class Composer
      */
     public static function postUpdate(Event $event)
     {
+        self::postInstallUpdate($event);
+    }
+
+    /**
+     * Run after install/update command
+     *
+     * @param  Event $event
+     * @return void
+     */
+    protected static function postInstallUpdate(Event $event)
+    {
         self::copyOutChildThemes($event, false);
+    }
+
+    /**
+     * Run before install/update command
+     *
+     * @param  Event $event
+     * @return void
+     */
+    protected static function preInstallUpdate(Event $event)
+    {
+        self::copyOutChildThemes($event, true);
     }
 
     /**
@@ -91,7 +113,7 @@ class Composer
             }
 
             shell_exec("cp -r {$tmpPath}/* {$themePath}/");
-            shell_exec("rm -fr {$tmpPath}"); // @todo dangerous - will need to validate tmpPath
+            shell_exec("rm -fr {$tmpPath}"); // @todo dangerous - need to validate tmpPath?
         }
     }
 
