@@ -5,7 +5,7 @@ This is a sample WordPress skeleton application that demonstrates the use of Com
 Ideally, WordPress, themes and plugins should be managed as dependencies instead of committing them to source control
 and spending inordinate effort to maintain them and keep them in sync with their original source.
 
-Only the child theme should be committed to source control and hence it is shown with this application.
+Only the child theme may be committed to source control and hence it is shown with this application.
 
 ## Requirements
 - [PHP](http://php.net/) >= 7.0
@@ -19,7 +19,7 @@ Only the child theme should be committed to source control and hence it is shown
 ## Installation
 - Clone this repo.
 - Run `composer install`.
-  + WordPress will be installed in the `wp` directory.
+  + WordPress will be installed in the `wp` directory. `wp/wp-config.php` will be created if it does not exist.
   + A `vendor` directory will be created by Composer for storing dependencies.
   + If not all the dependencies have been installed, run `composer install` again.
   + There are scripts run before and after `composer install` to copy out/back the child theme as the `wp` directory
@@ -28,7 +28,14 @@ Only the child theme should be committed to source control and hence it is shown
     development, check that nothing breaks, commit `composer.lock` to the repository, have the production server pull
     the new `composer.lock` and run `composer install`.
     See https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file
-- Copy `wp/wp-config.sample.php` to `wp/wp-config.php` and update the values within accordingly.
+- Update the values in `wp/wp-config.php` accordingly.
+
+## Caveat Emptor
+- If WordPress, themes and plugins are updated via the WordPress admin interface, it will cause `composer.json` to
+  be out of sync. Either avoid updating via the admin interface or manually update `composer.json` after updating via
+  the admin interface.
+- For themes and plugins pulled from repositories other than WordPress Packagist, e.g. from GitHub, the actual files
+  for the theme/plugin may not reside in the root of the repository, e.g. in a subfolder. Also, the source code from the repository may need to be built, e.g. build CSS and JS assets or download frontend/backend dependencies.
 
 ## Adapting for your project
 - WordPress install directory
@@ -62,10 +69,6 @@ Only the child theme should be committed to source control and hence it is shown
       - Change `package.name` and `package.dist.url` accordingly.
       - Update `package.version`. If no release version is available for the theme repository, `dev-master`
         can be used to indicate the `master` branch.
-    * Take note that the actual files for the theme may not reside in the root of the theme repository, e.g. in a
-      subfolder, in which case custom settings need to be created for `composer/installers` to install the theme
-      correctly. Also, the source code from the theme repository may need to be built, e.g. build CSS and JS assets
-      or download frontend/backend dependencies.
 - Adding a plugin
   + If the plugin exists on WordPress.org, run `composer require wpackagist-plugin/name-of-plugin`.
   + If not, edit `composer.json`:
@@ -77,10 +80,6 @@ Only the child theme should be committed to source control and hence it is shown
       - Change `package.name` and `package.dist.url` accordingly.
       - Update `package.version`. If no release version is available for the plugin repository, `dev-master`
         can be used to indicate the `master` branch.
-    * Take note that the actual files for the plugin may not reside in the root of the plugin repository, e.g. in a
-      subfolder, in which case custom settings need to be created for `composer/installers` to install the plugin
-      correctly. Also, the source code from the plugin repository may need to be built, e.g. build CSS and JS assets
-      or download frontend/backend dependencies.
 - Adding a must-use plugin (mu-plugin)
   + The steps are the same as that for adding a plugin, save that `package.type` is changed to `wordpress-muplugin`,
     which is supported by https://github.com/composer/installers.
