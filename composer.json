@@ -1,7 +1,8 @@
 {
   "_comments": [
     "See https://roots.io/using-composer-with-wordpress/",
-    "See http://composer.rarst.net/"
+    "See http://composer.rarst.net/",
+    "Composer resolves packages by the `name` root key, e.g. if name is `company/bc`, `composer require me/bc` fails"
   ],
 
   "name": "zionsg/wordpress-with-composer",

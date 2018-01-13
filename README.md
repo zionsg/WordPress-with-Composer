@@ -35,7 +35,10 @@ Only the child theme may be committed to source control and hence it is shown wi
   be out of sync. Either avoid updating via the admin interface or manually update `composer.json` after updating via
   the admin interface.
 - For themes and plugins pulled from repositories other than WordPress Packagist, e.g. from GitHub, the actual files
-  for the theme/plugin may not reside in the root of the repository, e.g. in a subfolder. Also, the source code from the repository may need to be built, e.g. build CSS and JS assets or download frontend/backend dependencies.
+  for the theme/plugin may not reside in the root of the repository, e.g. in a subfolder. Also, the source code from the
+  repository may need to be built, e.g. build CSS and JS assets or download frontend/backend dependencies.
+- For private repositories such as Bitbucket repos, there may be permission errors during `composer install` when the
+  SSH keys are protected with a passphrase.
 
 ## Adapting for your project
 - WordPress install directory
@@ -60,7 +63,9 @@ Only the child theme may be committed to source control and hence it is shown wi
   + Rename the directory `wp/wp-content/themes/child-theme`, e.g. to `wp/wp-content/themes/my-grandchild-theme`.
 - Adding a theme
   + If the theme exists on WordPress.org, run `composer require wpackagist-theme/name-of-theme`.
-  + If not, edit `composer.json`:
+  + If the theme exists on a public repository (e.g. GitHub) and supports Composer (i.e. has `composer.json`),
+    run `composer require vendor/name-of-theme`.
+  + Else, edit `composer.json`:
     * Refer to the sample entries for `zionsg/ZnWP-Bootstrap-Theme`. The following steps are to replace the sample
       entries. To add an additional theme, just copy, paste and update the sample entries.
     * Find the entry under the root key `require` for `zionsg/ZnWP-Bootstrap-Theme` and update both the key and value
@@ -71,7 +76,9 @@ Only the child theme may be committed to source control and hence it is shown wi
         can be used to indicate the `master` branch.
 - Adding a plugin
   + If the plugin exists on WordPress.org, run `composer require wpackagist-plugin/name-of-plugin`.
-  + If not, edit `composer.json`:
+  + If the theme exists on a public repository (e.g. GitHub) and supports Composer (i.e. has `composer.json`),
+    run `composer require vendor/name-of-plugin`.
+  + Else, edit `composer.json`:
     * Refer to the sample entries for `zionsg/znwp-webservice-plugin`. The following steps are to replace the sample
       entries. To add an additional plugin, just copy, paste and update the sample entries.
     * Find the entry under the root key `require` for `zionsg/znwp-webservice-plugin` and update both the key and value
@@ -88,3 +95,24 @@ Only the child theme may be committed to source control and hence it is shown wi
   + The steps are the same as that for adding a plugin, save that `package.type` is changed to `wordpress-dropin`,
     which is supported by https://github.com/composer/installers.
   + See http://wpengineer.com/2500/wordpress-dropins/.
+
+## Making a theme/plugin repository Composer-friendly
+- Add `composer.json` to the root of the repository. A sample is shown below.
+
+  ```
+  {
+    "name": "vendor/my-theme",
+    "description": "Composer-friendly theme",
+    "type": "wordpress-theme",
+
+    "require": {
+      "composer/installers": "~1.0"
+    }
+  }
+  ```
+- For the `type` key, use `wordpress-theme` for themes, `wordpress-plugin` for plugins.
+- The dependency `composer/installers` allows the repository to be installed in custom directories defined by
+  the `installer-paths` key based on the `type` key, which can be seen in the `composer.json` for this repo.
+- Take note on the spelling for the `name` key as it is used by Composer to resolve packages. E.g. for the sample above,
+  Composer will say that it cannot find the package if `composer require zendor/my-theme` is run or
+  `personal/my-theme` is added to the `composer.json` in a project.
