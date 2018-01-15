@@ -17,7 +17,21 @@
         <include-pattern>*/src/*</include-pattern>
     </rule>
 
+    <!-- Use spaces instead of tabs as per PSR-2 - see http://www.php-fig.org/psr/psr-2/#24-indenting -->
     <rule ref="WordPress">
         <include-pattern>*/wp/wp-content/themes/child-theme/*</include-pattern>
+        <exclude name="Generic.WhiteSpace.DisallowSpaceIndent" />
+    </rule>
+    <rule ref="Generic.WhiteSpace.ScopeIndent">
+        <properties>
+            <property name="indent" value="4"/>
+            <property name="tabIndent" value="false"/>
+        </properties>
+    </rule>
+    <rule ref="Generic.WhiteSpace.DisallowTabIndent" />
+
+    <!-- Ignore "Missing file doc comment" errors -->
+    <rule ref="Squiz">
+        <exclude name="Squiz.Commenting.FileComment"/>
     </rule>
 </ruleset>
