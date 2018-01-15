@@ -9,6 +9,7 @@
 
     <config name="installed_paths" value="vendor/wp-coding-standards/wpcs" />
 
+    <!-- Commented out as these rules apply to src folder only which is not checked here
     <rule ref="PSR1">
         <include-pattern>*/src/*</include-pattern>
     </rule>
@@ -16,6 +17,7 @@
     <rule ref="PSR2">
         <include-pattern>*/src/*</include-pattern>
     </rule>
+    -->
 
     <!-- Use spaces instead of tabs as per PSR-2 - see http://www.php-fig.org/psr/psr-2/#24-indenting -->
     <rule ref="WordPress">
@@ -30,8 +32,18 @@
     </rule>
     <rule ref="Generic.WhiteSpace.DisallowTabIndent" />
 
-    <!-- Ignore "Missing file doc comment" errors -->
+    <!-- Ignore error "Filenames should be all lowercase with hyphens..." -->
+    <rule ref="WordPress.Files.FileName">
+        <exclude name="WordPress.Files.FileName" />
+    </rule>
+
+    <!-- Relax from VIP ruleset :P -->
+    <rule ref="WordPress.VIP">
+        <exclude name="WordPress.VIP" />
+    </rule>
+
+    <!-- Ignore Squiz rules as they generally conflict with WordPress, e.g. camelCase variable names -->
     <rule ref="Squiz">
-        <exclude name="Squiz.Commenting.FileComment"/>
+        <exclude name="Squiz" />
     </rule>
 </ruleset>
