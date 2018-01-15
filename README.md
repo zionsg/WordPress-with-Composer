@@ -30,6 +30,9 @@ Only the child theme may be committed to source control and hence it is shown wi
     See https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file
 - Update the values in `wp/wp-config.php` accordingly.
 
+## Scripts
+- Run `composer cs` to check compliance with coding standards.
+
 ## Caveat Emptor
 - If WordPress, themes and plugins are updated via the WordPress admin interface, it will cause `composer.json` to
   be out of sync. Either avoid updating via the admin interface or manually update `composer.json` after updating via
@@ -60,6 +63,8 @@ Only the child theme may be committed to source control and hence it is shown wi
   + Edit `.gitignore`
     * Update the line `!wp/wp-content/themes/child-theme` with the preferred directory name,
       e.g. `!wp/wp-content/themes/my-grandchild-theme`.
+  + Edit `phpcs.xml`
+    * Update the path for `<include-pattern>` under `<rule ref="WordPress">`.
   + Rename the directory `wp/wp-content/themes/child-theme`, e.g. to `wp/wp-content/themes/my-grandchild-theme`.
 - Adding a theme
   + If the theme exists on WordPress.org, run `composer require wpackagist-theme/name-of-theme`.

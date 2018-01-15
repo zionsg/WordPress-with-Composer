@@ -62,6 +62,9 @@
     }
   ],
 
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+
   "_comments_require": [
     "johnpbloch/wordpress is an auto-updating fork of WordPress with composer.json added",
     "2 themes are installed - one from wpackagist and GitHub",
@@ -74,6 +77,10 @@
     "wpackagist-plugin/jetpack": "^5.7",
     "zionsg/ZnWP-Bootstrap-Theme": "dev-master",
     "zionsg/znwp-webservice-plugin": "dev-master"
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "^3.2",
+    "wp-coding-standards/wpcs": "^0.14.0"
   },
 
   "autoload": {
@@ -100,6 +107,13 @@
     "pre-install-cmd": "App\\Composer::preInstall",
     "post-install-cmd": "App\\Composer::postInstall",
     "pre-update-cmd": "App\\Composer::preUpdate",
-    "post-update-cmd": "App\\Composer::postUpdate"
+    "post-update-cmd": "App\\Composer::postUpdate",
+
+    "cs": [
+      "@cs-psr",
+      "@cs-wordpress"
+    ],
+    "cs-psr": "phpcs --standard=PSR1,PSR2 src",
+    "cs-wordpress": "phpcs"
   }
 }
