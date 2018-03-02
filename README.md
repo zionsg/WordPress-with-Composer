@@ -121,3 +121,25 @@ Only the child theme may be committed to source control and hence it is shown wi
 - Take note on the spelling for the `name` key as it is used by Composer to resolve packages. E.g. for the sample above,
   Composer will say that it cannot find the package if `composer require zendor/my-theme` is run or
   `personal/my-theme` is added to the `composer.json` in a project.
+
+## Composer autoloading
+- In general, themes/plugins should not depend on Composer's autoloading,
+  e.g. use `include 'vendor/autoload.php'` in the main theme/plugin file.
+  + `composer install` is done at the project level, i.e. the WordPress site, hence `vendor/autoload.php` will only
+    exist in the project root, not in the theme/plugin dir.
+  + The `vendor` dir and `composer.lock` are not committed to the theme/plugin repos.
+  + There is no guarantee that the final `vendor` dir for the project will always be 3 levels above the
+    theme/plugin dir, hence `include __DIR__ . '/../../../../vendor/autoload.php';` may break.
+  + Either manually include the other class files in the main theme/plugin file or write a custom `autoload.php` to be
+    used internally within the theme/plugin.
+- The above said, if one really wants to allow themes and plugins to make use of Composer's autoloading,
+  require `autoload.php` at the end of the site's `wp-config.php` BEFORE the requiring of `wp-settings.php`
+  (as this is where the themes and plugins are loaded):
+
+  ```
+  // Composer autoloader
+  require_once(ABSPATH . '../vendor/autoload.php');
+
+  // Sets up WordPress vars and included files.
+  require_once(ABSPATH . 'wp-settings.php');
+  ```
