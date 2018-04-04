@@ -127,13 +127,14 @@ Only the child theme may be committed to source control and hence it is shown wi
   e.g. use `include 'vendor/autoload.php'` in the main theme/plugin file.
   + `composer install` is done at the project level, i.e. the WordPress site, hence `vendor/autoload.php` will only
     exist in the project root, not in the theme/plugin dir.
+  + The project may not use Composer at all.
   + The `vendor` dir and `composer.lock` are not committed to the theme/plugin repos.
   + There is no guarantee that the final `vendor` dir for the project will always be 3 levels above the
     theme/plugin dir, hence `include __DIR__ . '/../../../../vendor/autoload.php';` may break.
   + Either manually include the other class files in the main theme/plugin file or write a custom `autoload.php` to be
     used internally within the theme/plugin.
 - The above said, if one really wants to allow themes and plugins to make use of Composer's autoloading,
-  require `autoload.php` at the end of the site's `wp-config.php` BEFORE the requiring of `wp-settings.php`
+  require `autoload.php` at the end of the site's `wp-config.php` **BEFORE** the requiring of `wp-settings.php`
   (as this is where the themes and plugins are loaded):
 
   ```
